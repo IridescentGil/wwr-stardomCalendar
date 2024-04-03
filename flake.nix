@@ -21,7 +21,7 @@
                 inherit system;
             };
         in
-        pkgs.mkShell.override {
+        pkgs.mkShell {
             packages = with pkgs; [
                 nodejs
                 eslint_d
