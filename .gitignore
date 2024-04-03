@@ -1,4 +1,6 @@
 *.ics
+.envrc
+.direnv
 
 # Logs
 logs
