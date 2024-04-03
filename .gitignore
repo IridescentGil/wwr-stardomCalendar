@@ -1,3 +1,5 @@
+*.ics
+
 # Logs
 logs
 *.log
