@@ -1,12 +1,10 @@
-name: CI
+name: Deploy to site
 
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-
-  workflow_dispatch:
 
 jobs:
   build:
