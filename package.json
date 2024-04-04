@@ -4,5 +4,11 @@
     "cheerio": "^1.0.0-rc.12",
     "ics": "^3.5.0",
     "timezones-ical-library": "^1.7.2"
+  },
+  "devDependencies": {
+    "@stylistic/eslint-plugin": "^1.7.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.1.1"
   }
 }
