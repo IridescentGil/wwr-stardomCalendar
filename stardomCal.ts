@@ -26,46 +26,48 @@ async function getEvents(year: number, month: number, events: ics.EventAttribute
     const $ = cheerio.load(data);
 
     $('td.has-events:not(.nextmonth)').each((_idx, el) => {
-        if ($('.tagwarp', el).css('background') == '#e91e63') {
-            const date = $('.mc-date .screen-reader-text', el).text().split(' ')[0]
-                ?.split('.').map((s) => parseInt(s));
+        $('div.calendar-event', el).each((_unused, eventElement) => {
+            if ($('.tagwarp', eventElement).css('background') === '#e91e63') {
+                const date = $('.mc-date .screen-reader-text', el).text().split(' ')[0]
+                    ?.split('.').map((s) => parseInt(s));
 
-            const time = $(
-                '.screen-reader-text [style="background:#e91e63;"] .mc_grid_in_time',
-                el,
-            ).text().split(':').map((s) => parseInt(s));
+                const time = $(
+                    '.screen-reader-text .mc_grid_in_time',
+                    eventElement,
+                ).text().split(':').map((s) => parseInt(s));
 
-            const start = toIcsDateTime(date?.concat(time));
+                const start = toIcsDateTime(date?.concat(time));
 
-            let title = $('.screen-reader-text .mc_grid_in_tit', el).html()?.trim();
-            if (title) {
-                const s = title.indexOf('\uff3b');
-                const e = title.indexOf('\uff3d');
-                if (s != -1 && e > s) {
-                    title = title.substring(0, s) + title.substring(e + 1);
+                let title = $('.screen-reader-text .mc_grid_in_tit', eventElement).html()?.trim();
+                if (title) {
+                    const s = title.indexOf('\uff3b');
+                    const e = title.indexOf('\uff3d');
+                    if (s != -1 && e > s) {
+                        title = title.substring(0, s) + title.substring(e + 1);
+                    }
+                } else {
+                    title = '';
                 }
-            } else {
-                title = '';
-            }
 
-            const categories = [
-                'スターダム',
-                $('.screen-reader-text .mc_grid_in_tag', el).text(),
-            ];
-            const url = $('a.url', el).attr('href');
+                const categories = [
+                    'スターダム',
+                    $('.screen-reader-text .mc_grid_in_tag', eventElement).text(),
+                ];
+                const url = $('a.url', eventElement).attr('href');
 
-            if (start != undefined) {
-                const event: ics.EventAttributes = {
-                    startOutputType: 'local',
-                    start: start,
-                    duration: { hours: 3 },
-                    title: title,
-                    url: url,
-                    categories: categories,
-                };
-                events.push(event);
+                if (start != undefined) {
+                    const event: ics.EventAttributes = {
+                        startOutputType: 'local',
+                        start: start,
+                        duration: { hours: 3 },
+                        title: title,
+                        url: url,
+                        categories: categories,
+                    };
+                    events.push(event);
+                }
             }
-        }
+        });
     });
 
     return events;
